@@ -1,12 +1,17 @@
 export const resource = {
     baseURL: 'https://reqres.in/api' ,
-    
-    userData: {
+    getUserList: {
+        page: 2,
+        per_page: 6,
+        total: 12,
+        total_pages: 2,
+    } ,
+    userData: [{
         id: 2,
         email: "janet.weaver@reqres.in",
         first_name: "Janet",
         last_name: "Weaver",
         avatar: "https://reqres.in/img/faces/2-image.jpg"
-        },
+        }],
 
 };
