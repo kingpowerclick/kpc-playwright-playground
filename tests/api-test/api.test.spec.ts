@@ -1,17 +1,27 @@
 import { expect, test } from "@playwright/test";
 import { dataApi } from "./api.data.ts";
-import { verifyStatusCode, verifyResponseDataGetUser } from "./api.function.ts";
+import {
+  verifyStatusCode,
+  verifyResponseDataGetUser,
+  extractJson,
+} from "./api.function.ts";
 
 // const verifyResponse = new VerifyResponse();
 const dataRes = dataApi.getData;
 const dataReg = dataApi.register;
-const dataUserList = dataApi.userData;
 
 test("should able to login via api", async ({ request }) => {
   const resp = await request.get(`${dataRes.baseUrl}/users?page=2`);
-  const respBody = await resp.json();
   await verifyStatusCode(resp);
-  await verifyResponseDataGetUser(respBody);
+  const respBody = await resp.json();
+  console.log(respBody);
+  await verifyResponseDataGetUser(
+    await extractJson(resp),
+    dataRes.page,
+    dataRes.per_page,
+    dataRes.total,
+    dataRes.total_pages
+  );
 });
 
 test("should login successfully", async ({ request }) => {

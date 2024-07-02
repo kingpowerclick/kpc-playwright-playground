@@ -4,24 +4,24 @@ import { dataApi } from "./api.data";
 export const verifyStatusCode = (response: APIResponse) => {
   expect(response.status()).toEqual(200);
 };
-// export class VerifyResponse {
-//   async verifyStatusCode(response: APIResponse): Promise<void> {
-//     if (response.status() == 200) {
-//       await expect(response.status()).toEqual(200);
-//     } else {
-//       await expect(response.status()).toEqual(404);
-//     }
-//     // Assuming status() is a function that retrieves the status code from APIResponse
-//   }
 
-export const verifyResponseDataGetUser = (resp: any) => {
-  const dataExp = dataApi.getData;
+export async function extractJson(response) {
+  return await response.json();
+}
+
+export const verifyResponseDataGetUser = (
+  resp: any,
+  page: number,
+  per_page: number,
+  total: number,
+  total_pages: number
+) => {
   const dataUser = dataApi.userData;
 
-  expect(resp.page).toEqual(dataExp.page);
-  expect(resp.per_page).toEqual(dataExp.per_page);
-  expect(resp.total).toEqual(dataExp.total);
-  expect(resp.total_pages).toEqual(dataExp.total_pages);
+  expect(resp.page).toEqual(page);
+  expect(resp.per_page).toEqual(per_page);
+  expect(resp.total).toEqual(total);
+  expect(resp.total_pages).toEqual(total_pages);
 
   // Using filter to find items with id === 7
   let dataArr = resp.data;
