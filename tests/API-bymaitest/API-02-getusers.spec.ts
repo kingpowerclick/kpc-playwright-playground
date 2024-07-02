@@ -20,7 +20,8 @@ test('GET - Single User' , async ({request}) => {
 test('GET - List Users' , async ({request}) => {
     const resp = await request.get (`${resource.baseURL}/users?page=2`)
     const respBody = await resp.json();
-    await verifyStatusCode
-    await verifyRespUserdata
-
+    await verifyStatusCode(resp) ;
+    console.log(respBody)
+    await verifyRespUserdata(respBody);
+    
 })
