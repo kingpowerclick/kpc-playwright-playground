@@ -5,7 +5,8 @@ export const verifyStatusCode = (response: APIResponse) => {
     if (response.status() == 200) {
     expect(response.status()).toEqual(200);
     }
-    else { expect(response.status() == 204)}
+    else { if(response.status() == 400)
+    expect(response.status() == 400)}
 }
 
 export const verifyRespUserdata = (
@@ -40,8 +41,8 @@ export const verifyRespUserdata = (
     }  
   }
 
-export const RespJson = (resp: any) => {  // สร้างตัวแปรประกาศฟังก์ชั่น แปลง json เป็น string และเอาไปใช้ในเทสเคส *ต้องทำทุกครั้ง
+/*export const RespJson = (resp: any) => {  // สร้างตัวแปรประกาศฟังก์ชั่น แปลง json เป็น string และเอาไปใช้ >> ไม่ต้องใช้*
     let data = resp.json();
     return data
-}
+}*/ 
  

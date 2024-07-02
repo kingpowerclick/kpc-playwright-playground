@@ -25,3 +25,13 @@ test('GET - List Users' , async ({request}) => {
     await verifyRespUserdata(respBody);
     
 })
+
+test('GET - User Not found' , async ({request}) => {
+    const resp = await request.get (`${resource.baseURL}/users/23`)
+    const respBody = await resp.json();
+    await verifyStatusCode(resp);
+    console.log(respBody)
+    expect(respBody).toEqual({});
+
+
+})
