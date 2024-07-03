@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { resource } from "./data";
+import { verifyRespUserdata, verifyStatusCode } from "./function";
 
 // Regres.in
 test('POST Login - Success' , async ({request}) => {
@@ -16,9 +18,14 @@ test('POST Login - Success' , async ({request}) => {
 })
 
 test('POST Login - Fail' , async ({request}) => {
+    const resp = await request.post (`${resource.baseURL}/login` , {
+        data: {
+            email: "peter@klaven"
+        }
+    });
 
- 
-
-
-
+    const respBody = await resp.json();
+    await verifyStatusCode(resp);
+    expect (respBody.error).toEqual('Missing password');
+    console.log(respBody);
 })
