@@ -1,3 +1,5 @@
+import { mainModule } from "process"
+
 export const resource = {
     baseURL: 'https://restful-booker.herokuapp.com' ,
     loginAccount: {

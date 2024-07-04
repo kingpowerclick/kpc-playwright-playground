@@ -6,8 +6,8 @@ import { verifyRespUserdata, verifyStatusCode } from "./function";
 test('POST Login - Success' , async ({request}) => {
     const resp = await request.post ('https://reqres.in/api/login' , {
         data: {
-            "email": "eve.holt@reqres.in",
-            "password": "cityslicka"
+            email: "eve.holt@reqres.in",
+            password: "cityslicka"
         }
     });
 
