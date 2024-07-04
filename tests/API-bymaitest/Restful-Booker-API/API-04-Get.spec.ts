@@ -15,3 +15,22 @@ test('Get - Auth login' , async ({request}) => {
     console.log(resp)
     console.log(respBody)
 })
+
+//ทดสอบอัพเดทข้อมูล booking by ID
+test('PATCH - Update Name' , async ({request}) => {
+    const resp = await request.patch(`${resource.baseURL}/booking/3204` , {
+        headers: {
+            ContentType : "application/json" ,
+            Accept :"application/json"
+        },
+        data : { firstname :"Supan" ,
+                lastname : "Hatt"
+        }
+    })
+    const respBody = await resp.json()
+    verifyStatusCode(resp)
+    expect(respBody.firstname).toEqual("Supan")
+    expect(respBody.lastname).toEqual("Hatt")
+    expect(respBody).toHaveProperty("Bookingdates")
+
+})

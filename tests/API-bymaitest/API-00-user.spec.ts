@@ -1,4 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { resource } from "./data";
+import { verifyRespUserdata, verifyStatusCode } from "./function";
 
 //test.describe ใช้สร้างกลุ่มการทดสอบที่ชื่อว่า 'User API Tests' และเก็บตัวแปร userID
 test.describe('Manage User API Tests', () => {
@@ -20,13 +22,13 @@ test.describe('Manage User API Tests', () => {
         expect(responseBody).toHaveProperty('id');  //ตรวจสอบว่าการ Response มี property id ซึ่งบ่งบอกว่าผู้ใช้ถูกสร้างขึ้นเรียบร้อยแล้วหรือยัง
         console.log(response)
 
-        // Keep user id for used
+        // Keep user id for used : ประกาศตัวแปร userID ที่สร้าง(POST) เก็บไว้เพื่อใช้ทดสอบเคสอื่นต่อ
         userID = responseBody.id;
     });      
 
     //test case ทดสอบอัพเดทข้อมูล user 
     test('PUT - Update User' , async ({request}) => {
-        const resp = await request.put('https://reqres.in/api/users/'+ userID , {  //อย่าลืมใส่จุดเชื่อมโยงข้อมูลที่จะให้มันไปอัพเดทส่วนไหน อันนี้ให้มันไปอัพเดท userID ที่สร้าง หรือเราสามารถใส่ เลข ID คนนั้นได้เลย
+        const resp = await request.put('https://reqres.in/api/users/' + userID , {  //อย่าลืมใส่จุดเชื่อมโยงข้อมูลที่จะให้มันไปอัพเดทส่วนไหน อันนี้ให้มันไปอัพเดท userID ที่สร้าง หรือเราสามารถใส่ เลข ID คนนั้นได้เลย
             data : {
                 "name" : "Sky" ,
                 "job" : "Teacher"
@@ -41,14 +43,29 @@ test.describe('Manage User API Tests', () => {
     
     });
 
-test('DELETE - User' , async ({request}) => {
-    const response = await request.delete('https://reqres.in/api/users/2')
+
+    test('DELETE - User' , async ({request}) => {
+    const response = await request.delete('https://reqres.in/api/users/2') //ใส่ ID ที่จะให้มันไปลบข้อมูล เคสนี้ userID =2 
 
     expect(response.status()).toBe (204);
     console.log(response);
 
-})
+    })
 
+    test('PATCH - Update Partial User' , async ({request}) => {
+        const resp = await request.patch(`${resource.baseURL}/user/7` , { //หรือจะให้มันอัพเดท userID ที่สร้างไว้ก่อนหน้า `${resource.baseURL}/user/${userID}`
+            data : {
+                name : "Mai" , 
+                job : "QA"
+            }
+        })
+        const respBody = await resp.json()
+        verifyStatusCode(resp)
+        expect(respBody.name).toEqual("Mai")
+        expect(respBody.updatedAt).toContain('2024-07-04')
+        console.log(respBody)
+
+    })
 
 
 
