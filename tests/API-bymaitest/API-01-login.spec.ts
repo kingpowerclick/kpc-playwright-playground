@@ -25,7 +25,7 @@ test('POST Login - Fail' , async ({request}) => {
     });
 
     const respBody = await resp.json();
-    await verifyStatusCode(resp);
+    verifyStatusCode(resp);
     expect (respBody.error).toEqual('Missing password');
-    console.log(respBody);
+    console.log(resp);
 })
