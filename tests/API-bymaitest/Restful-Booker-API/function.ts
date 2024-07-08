@@ -12,6 +12,19 @@ export const verifyStatusCode = (response: APIResponse) => {
     expect(response.status() == 400)}
 }
 
-export const verifyBookingID = (bookingID: number) => {
+export const verifyBookingDetails = (resp : any) => {
+    let bookingDetailsList = new Array();
+    const bookingData = resource.bookingDetail;
+    bookingDetailsList.push(bookingData);
     
+    for(let index=0;index < bookingData.length; index++){
+        expect(resp.booking[index].firstname).toEqual(bookingData[index].firstname)
+
+    }
+}
+
+
+export const verifyBookingID = ( resp : any) => {
+
+
 }

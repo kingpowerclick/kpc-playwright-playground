@@ -17,7 +17,7 @@ test('GET - Single User' , async ({request}) => {
     console.log(respBody)
 })
 
-test('GET - List Users' , async ({request}) => {
+test('GET - All Users' , async ({request}) => {
     const resp = await request.get (`${resource.baseURL}/users?page=2`)
     const respBody = await resp.json();
     await verifyStatusCode(resp) ;
@@ -32,4 +32,11 @@ test('GET - User Not found', async ({request}) => {
     await verifyStatusCode(resp);
     console.log(respBody)
     expect(respBody).toEqual({});
+})
+
+test('GET - Users ID 7 ' , async ({request}) => {
+    const resp = await request.get (`${resource.baseURL}/users/7`)
+    console.log (await resp.json());
+    await verifyStatusCode(resp) ;
+
 })

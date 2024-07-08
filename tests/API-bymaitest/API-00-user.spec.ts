@@ -53,7 +53,7 @@ test.describe('Manage User API Tests', () => {
     })
 
     test('PATCH - Update Partial User' , async ({request}) => {
-        const resp = await request.patch(`${resource.baseURL}/user/7` , { //หรือจะให้มันอัพเดท userID ที่สร้างไว้ก่อนหน้า `${resource.baseURL}/user/${userID}`
+        const resp = await request.patch(`${resource.baseURL}/user/7` , { //หรือจะให้มันอัพเดท userID ที่สร้างไว้ก่อนหน้า `${resource.baseURL}/user/${userID}` or + userID
             data : {
                 name : "Mai" , 
                 job : "QA"

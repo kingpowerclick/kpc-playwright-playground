@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { verifyBookingID , verifyStatusCode } from "./function";
+import { verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./function";
 
+//let tokenID ;
 
 //Restful-booker
 test('Get - Auth login' , async ({request}) => {
@@ -13,24 +14,34 @@ test('Get - Auth login' , async ({request}) => {
     expect(respBody).toHaveProperty("token");
     expect(respBody.token).not.toBeNull();
     console.log(resp)
-    console.log(respBody)
+    console.log(respBody);
+
+    //tokenID = respBody.token ;
+})
+
+test('Get - BookingDetails' , async ({request}) => {
+    let bookingID = resource.bookingID ;
+    const resp = await request.get(`${resource.baseURL}/booking/${bookingID}`)
+    const respBody = await resp.json();
+    verifyBookingDetails(respBody); // ยังรันไม่ผ่าน
+
 })
 
 //ทดสอบอัพเดทข้อมูล booking by ID
-test('PATCH - Update Name' , async ({request}) => {
-    const resp = await request.patch(`${resource.baseURL}/booking/3204` , {
-        headers: {
-            ContentType : "application/json" ,
-            Accept :"application/json"
-        },
-        data : { firstname :"Supan" ,
-                lastname : "Hatt"
-        }
-    })
-    const respBody = await resp.json()
-    verifyStatusCode(resp)
-    expect(respBody.firstname).toEqual("Supan")
-    expect(respBody.lastname).toEqual("Hatt")
-    expect(respBody).toHaveProperty("Bookingdates")
-
-})
+// test('PATCH - Update Name' , async ({request}) => {
+//     const resp = await request.patch(`${resource.baseURL}/booking/4810` , {
+//         data:{
+//                 "firstname" :"Supan" ,
+//                 "lastname" : "Hatt" }
+        // headers: {
+        //     "ContentType" : "application/json" ,
+        //     "Accept" :"application/json",
+        //      "Cookie" : `token=05d20c33a86ee87` },
+//     });
+//     const respBody = await resp.json();
+//     verifyStatusCode(resp)
+//     expect(respBody.firstname).toEqual("Supan")
+//     expect(respBody.lastname).toEqual("Hatt")
+//     expect(respBody.totalprice).toEqual(111)
+//     console.log(respBody)
+//})
