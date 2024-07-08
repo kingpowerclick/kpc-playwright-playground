@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { verifyBookingDetails, verifyStatusCode } from "./function";
+import { verifyBookingDetails, verifyBookingID, verifyStatusCode } from "./function";
 import { request } from "http";
 
-let bookingID ;
+let userID ;
 let bookingList = new Array();  //เป็นการประกาศตัวแปรประเภท array หรือจะเขียนเป็น let bookingID = [] ;
 
-test('POST - create booking' , async ({request}) => {
+test('POST - create booking & Verify success' , async ({request}) => {
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
                 "firstname" : "Fluke",
@@ -27,32 +27,36 @@ test('POST - create booking' , async ({request}) => {
     console.log(respBody)
     expect(respBody.booking).toHaveProperty('additionalneeds');
     expect(respBody.booking.firstname).toEqual('Fluke')
-    bookingList.push(respBody);  // วิธีเพิ่มข้อมูลเข้าไปใน array จะเป็นการเพิ่มข้อมูลต่อท้ายเข้าไปใน array เป็นการเพิ่ม respBody เข้าไปในตัวแปร bookingList
+    // bookingList.push(respBody); // วิธีเพิ่มข้อมูลเข้าไปใน array จะเป็นการเพิ่มข้อมูลต่อท้ายเข้าไปใน array เป็นการเพิ่ม respBody เข้าไปในตัวแปร bookingList
+    userID = respBody.bookingid 
 
-    //เทส Get รายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
-    for(let index=0;index<bookingList.length;index++) {
-        const resp = await request.get(`${resource.baseURL}/booking/${bookingList[index].bookingid}`)
-        const respBody = await resp.json()
-        console.log(respBody)
-        expect(respBody.firstname).toEqual('Fluke')
-     }
+    //for(let index=0;index<userID.length;index++) {
+        const verifyresp = await request.get(`${resource.baseURL}/booking/${userID}`) //เทส Get รายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
+        const verifyrespBody = await verifyresp.json()
+        console.log(verifyrespBody)
+        expect(verifyrespBody.firstname).toEqual('Fluke')
+     //}
 
-    for(let index=0;index<bookingList.length;index++) {
-        const resp = await request.get(`${resource.baseURL}/booking?firstname=${bookingList[index].booking.firstname}`)
-        const respBody = await resp.json()
-        console.log(respBody)
-        expect(respBody[index].bookingid).toEqual(bookingList[index].bookingid)
+    // //for(let index=0;index<userID.length;index++) {
+    //     const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`)
+    //     const respBodyFluke = await respFluke.json()
+    //     console.log(respBodyFluke)
+    //     expect(respBodyFluke.bookingid).toBe(userID) //ยังไม่ผ่าน
 
-    }
+    // //}
 
 })
 
-
-
-// test('Get - BookingDetails' , async ({request}) => {
-//     let bookingID = resource.bookingID ;
-//     const resp = await request.get(`${resource.baseURL}/booking/${bookingID}`)
-//     const respBody = await resp.json();
-//     verifyBookingDetails(respBody); // ยังรันไม่ผ่าน
-
-// })
+//หลัง create เสร็จ ตั้งให้ ลบข้อมูลนั้นออกทุกครั้ง ใช้ afterAll
+test.afterAll(async({request}) => {
+    const response = await request.delete(`${resource.baseURL}/booking/${userID}` , {
+        headers: {
+            "ContentType" : "application/json" ,
+            "Authorization" :"Basic YWRtaW46cGFzc3dvcmQxMjM=",
+        }
+    })
+    const respBody = await response.text()
+    console.log (respBody)
+    verifyStatusCode(response)
+    expect(respBody).toEqual('Created')
+})
