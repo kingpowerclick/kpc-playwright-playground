@@ -4,10 +4,9 @@ import { verifyBookingDetails, verifyStatusCode } from "./function";
 import { request } from "http";
 
 let bookingID ;
-//let bookingList = new Array();  //เป็นการประกาศตัวแปรประเภท array หรือจะเขียนเป็น let bookingID = [] ;
+let bookingList = new Array();  //เป็นการประกาศตัวแปรประเภท array หรือจะเขียนเป็น let bookingID = [] ;
 
-
-test.beforeAll(async ({request}) => {
+test('POST - create booking' , async ({request}) => {
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
                 "firstname" : "Fluke",
@@ -27,26 +26,24 @@ test.beforeAll(async ({request}) => {
     expect(respBody).toHaveProperty('bookingid');
     console.log(respBody)
     expect(respBody.booking).toHaveProperty('additionalneeds');
-    expect(respBody.booking.firstname).toEqual('Fluke');
-    
-    bookingID = respBody.bookingid ; 
+    expect(respBody.booking.firstname).toEqual('Fluke')
+    bookingList.push(respBody);  // วิธีเพิ่มข้อมูลเข้าไปใน array จะเป็นการเพิ่มข้อมูลต่อท้ายเข้าไปใน array เป็นการเพิ่ม respBody เข้าไปในตัวแปร bookingList
 
-    test('Get - verify post data' , async ({request}) => {
-    for(let index=0;index<bookingID.length;index++) {
-        const resp = await request.get(`${resource.baseURL}/booking/${bookingID}`)
+    //เทส Get รายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
+    for(let index=0;index<bookingList.length;index++) {
+        const resp = await request.get(`${resource.baseURL}/booking/${bookingList[index].bookingid}`)
         const respBody = await resp.json()
         console.log(respBody)
         expect(respBody.firstname).toEqual('Fluke')
      }
 
-    for(let index=0;index<bookingID.length;index++) {
-        const resp = await request.get(`${resource.baseURL}/booking?firstname=Fluke`)
+    for(let index=0;index<bookingList.length;index++) {
+        const resp = await request.get(`${resource.baseURL}/booking?firstname=${bookingList[index].booking.firstname}`)
         const respBody = await resp.json()
         console.log(respBody)
-        expect(respBody[index].bookingid).toEqual(bookingID[index].bookingid)
+        expect(respBody[index].bookingid).toEqual(bookingList[index].bookingid)
 
     }
-    })
 
 })
 
