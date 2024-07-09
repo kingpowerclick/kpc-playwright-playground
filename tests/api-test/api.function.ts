@@ -5,10 +5,6 @@ export const verifyStatusCode = (response: APIResponse) => {
   expect(response.status()).toEqual(200);
 };
 
-export async function extractJson(response) {
-  return await response.json();
-}
-
 export const verifyResponseDataGetUser = (
   resp: any,
   page: number,

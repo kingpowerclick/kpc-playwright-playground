@@ -1,22 +1,17 @@
 import { expect, test } from "@playwright/test";
 import { dataApi } from "./api.data.ts";
-import {
-  verifyStatusCode,
-  verifyResponseDataGetUser,
-  extractJson,
-} from "./api.function.ts";
+import { verifyResponseDataGetUser } from "./api.function.ts";
 
 // const verifyResponse = new VerifyResponse();
 const dataRes = dataApi.getData;
-const dataReg = dataApi.register;
+const dataRegister = dataApi.register;
 
 test("should able to login via api", async ({ request }) => {
-  const resp = await request.get(`${dataRes.baseUrl}/users?page=2`);
-  await verifyStatusCode(resp);
-  const respBody = await resp.json();
-  console.log(respBody);
+  let resp = await request.get(`${dataRes.baseUrl}/users?page=2`);
+  await expect(resp).toBeOK();
+  resp = await resp.json();
   await verifyResponseDataGetUser(
-    await extractJson(resp),
+    resp,
     dataRes.page,
     dataRes.per_page,
     dataRes.total,
@@ -25,13 +20,15 @@ test("should able to login via api", async ({ request }) => {
 });
 
 test("should login successfully", async ({ request }) => {
-  const response = await request.post(`${dataRes.baseUrl}/login`, {
+  let response = await request.post(`${dataRes.baseUrl}/login`, {
     data: {
-      dataReg,
+      email: dataRegister.email,
+      password: dataRegister.password,
     },
   });
   // Add assertions based on API response
-  await verifyStatusCode(response);
-  const responseData = await response.json();
-  expect(responseData).toHaveProperty("token");
+  await expect(response).toBeOK();
+  response = await response.json();
+  expect(response.body).toHaveProperty("token");
+  // expect(response.body).toHaveProperty("token",);
 });
