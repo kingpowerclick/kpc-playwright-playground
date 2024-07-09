@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
 import { verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./function";
+import { request } from "http";
 
 let tokenID ;
-let bookingID;
+let userID;
 
 //Restful-booker
 test('Get - Auth login' , async ({request}) => {
@@ -23,15 +24,15 @@ test('Get - Auth login' , async ({request}) => {
 test('POST - create booking & Verify success' , async ({request}) => {
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
-                "firstname" : "Pink",
-                "lastname" : "Sasiphat",
-                "totalprice" : 5000 ,
+                "firstname" : "Supan",
+                "lastname" : "Hatt",
+                "totalprice" : 15000 ,
                 "depositpaid" : true,
                 "bookingdates" : {
-                    "checkin" : "2024-01-01",
-                    "checkout" : "2024-01-12"
+                    "checkin" : "2024-01-12",
+                    "checkout" : "2024-01-13"
                 },
-                "additionalneeds" : null
+                "additionalneeds" : "Breakfast"
             }
     })
     
@@ -40,36 +41,56 @@ test('POST - create booking & Verify success' , async ({request}) => {
     expect(respBody).toHaveProperty('bookingid');
     console.log(respBody)
     expect(respBody.booking).toHaveProperty('additionalneeds');
-    expect(respBody.booking.firstname).toEqual('Pink')
+    expect(respBody.booking.firstname).toEqual('Supan')
 
-    bookingID = respBody.bookingid;
+    userID = await respBody.bookingid;
 })
 
 
 test('Get - BookingDetails' , async ({request}) => {
-    const resp = await request.get(`${resource.baseURL}/booking/${bookingID}`)
+    const resp = await request.get(`${resource.baseURL}/booking/${userID}` , {
+        headers : {
+            "Accept" :"application/json",
+        }
+    })
     const respBody = await resp.json();
     console.log(respBody)
-    expect(respBody.firstname).toEqual('Pink')
-    //verifyBookingDetails(respBody); // ยังรันไม่ผ่าน
+    //expect(respBody.firstname).toEqual('Supan')
+    verifyBookingDetails(respBody); // ยังรันไม่ผ่าน
 
 })
 
 //ทดสอบอัพเดทข้อมูล booking by ID
 test('PATCH - Update Name' , async ({request}) => {
-    const resp = await request.patch(`${resource.baseURL}/booking/${bookingID}` , {
-        data:{
-                "firstname" :"Supan" ,
-                "lastname" : "Hatt" },
+    const resp = await request.patch(`${resource.baseURL}/booking/${userID}` , {
         headers: {
             "ContentType" : "application/json" ,
             "Accept" :"application/json",
-             "Cookie" : `token=${tokenID}` },
+            "Authorization" :"Basic YWRtaW46cGFzc3dvcmQxMjM=" },
+        data:{
+                "firstname" :"Pink" ,
+                "lastname" : "Blue" },
     });
     const respBody = await resp.json();
     verifyStatusCode(resp)
-    expect(respBody.firstname).toEqual("Supan")
-    expect(respBody.lastname).toEqual("Hatt")
-    expect(respBody.totalprice).toEqual(5000)
+    expect(respBody.firstname).toEqual("Pink")
+    expect(respBody.lastname).toEqual("Blue")
+    expect(respBody.totalprice).toEqual(15000)
     console.log(respBody)
+})
+
+//ทดสอบใช้ params
+test('Get - booking ID by Date' , async ({request}) => {
+    const resp = await request.get(`${resource.baseURL}/booking` , {
+        params : {
+            checkin : "2021-03-19" , 
+            checkout : "2024-01-26"
+        }
+    })
+
+    const respBody = await resp.json()
+    console.log(respBody)
+    expect(respBody).toContain(userID) //ยังไม่ผ่าน
+
+
 })

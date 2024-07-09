@@ -39,13 +39,15 @@ export const resource = {
     bookingDetail : [{
         firstname: "Supan",
         lastname: "Hatt",
-        totalprice: 127,
+        totalprice: 15000,
         depositpaid: true,
         bookingdates: {
-            checkin: "2024-01-05",
-            checkout: "2024-02-19"
+            checkin: "2024-01-12",
+            checkout: "2024-01-13"
         }
     }],
+
+    additionalneeds : "Breakfast"
 
 
 }

@@ -38,7 +38,7 @@ test('POST - create booking & Verify success' , async ({request}) => {
      //}
 
     // //for(let index=0;index<userID.length;index++) {
-    //     const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`)
+    //     const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้
     //     const respBodyFluke = await respFluke.json()
     //     console.log(respBodyFluke)
     //     expect(respBodyFluke.bookingid).toBe(userID) //ยังไม่ผ่าน
