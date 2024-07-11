@@ -7,7 +7,7 @@ let bookingID ;  // ประกาศตัวแปร เก็บค่า b
 //let bookingList = new Array();  //เป็นการประกาศตัวแปรประเภท array หรือจะเขียนเป็น let bookingID = [] ;
 
 //เพิ่ม beforeAll เพื่อสร้่างข้อมูลขึ้นมาชุดนึง และเก็บตัวแปรเอาไปใช้ต่อ
-test.beforeAll(async ({request}) => {
+test.beforeEach(async ({request}) => {
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
                 "firstname" : "Fluke",
