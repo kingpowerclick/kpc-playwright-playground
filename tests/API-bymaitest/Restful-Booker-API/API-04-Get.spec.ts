@@ -45,24 +45,22 @@ test.describe('Test Manage Booking' , () => {
         expect(respBody.booking).toHaveProperty('additionalneeds');
         expect(respBody.booking.firstname).toEqual('Supan')
         
-        
         userID = respBody.bookingid
-        return userID
 
-    })
-
-    test('Get - BookingDetails' , async ({request} ) => {
-        
-        const resp = await request.get(`${resource.baseURL}/booking/${userID}` , {
-            headers: {
-                "Accept" :"application/json", }
+        await test.step('Get - BookingDetails' , async () => {
+            const resp = await request.get(`${resource.baseURL}/booking/${userID}` , {
+                headers: {
+                    "Accept" :"application/json", }
+            })
+            const respBody = await resp.json();
+            
+            console.log(respBody)
+            verifyBookingDetails(respBody);
+    
         })
-        const respBody = await resp.json();
-        
-        console.log(respBody)
-        verifyBookingDetails(respBody);
-
+    
     })
+
 
         //ทดสอบอัพเดทข้อมูล booking by ID
     test('PATCH - Update Name' , async ({request}) => {

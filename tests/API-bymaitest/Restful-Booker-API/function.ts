@@ -35,4 +35,3 @@ export const verifyBookingID = ( resp : any) => {
 
 }
 
-export const verifyPUTdata = 
