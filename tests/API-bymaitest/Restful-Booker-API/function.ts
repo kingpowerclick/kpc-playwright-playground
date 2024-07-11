@@ -13,18 +13,26 @@ export const verifyStatusCode = (response: APIResponse) => {
 }
 
 export const verifyBookingDetails = (resp : any) => {
-    let bookingDetailsList = new Array();
-    const bookingData = resource.bookingDetail;
-    bookingDetailsList.push(bookingData);
-    
-    for(let index=0;index < bookingData.length; index++){
-        expect(resp.booking[index].firstname).toEqual(bookingData[index].firstname)
+    const dataBooking = resource.bookingDetail
+    expect(resp.firstname).toEqual(dataBooking.firstname);
+    expect(resp.lastname).toEqual(dataBooking.lastname);
+    expect(resp.totalprice).toEqual(dataBooking.totalprice);
+    expect(resp.depositpaid).toEqual(dataBooking.depositpaid);
 
-    }
+
+    // let bookingDetailsList = new Array();
+    // const bookingData = resource.bookingDetail;
+    // bookingDetailsList.push(bookingData);
+    
+    // // for(let index=0;index < bookingData.length; index++){
+    // //     expect(resp.booking[index].firstname).toEqual(bookingData[index].firstname)
+
+    // // }
 }
 
 
 export const verifyBookingID = ( resp : any) => {
 
-
 }
+
+export const verifyPUTdata = 

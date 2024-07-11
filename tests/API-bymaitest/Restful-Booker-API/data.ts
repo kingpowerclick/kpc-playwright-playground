@@ -36,7 +36,7 @@ export const resource = {
             bookingid: 2254
         },
     ],
-    bookingDetail : [{
+    bookingDetail : {
         firstname: "Supan",
         lastname: "Hatt",
         totalprice: 15000,
@@ -45,7 +45,7 @@ export const resource = {
             checkin: "2024-01-12",
             checkout: "2024-01-13"
         }
-    }],
+    },
 
     additionalneeds : "Breakfast"
 

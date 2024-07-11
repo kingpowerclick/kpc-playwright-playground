@@ -3,7 +3,7 @@ import exp from "constants";
 
 
 //GraphQL: POST countries.trevorblades.com
-test.only('the GraphQL API Works' , async ({request}) => {
+test('the GraphQL API Works' , async ({request}) => {
     const response = await request.post('https://countries.trevorblades.com/' , {
         data: {
             query: `

@@ -30,20 +30,20 @@ test('POST - create booking & Verify success' , async ({request}) => {
     // bookingList.push(respBody); // วิธีเพิ่มข้อมูลเข้าไปใน array จะเป็นการเพิ่มข้อมูลต่อท้ายเข้าไปใน array เป็นการเพิ่ม respBody เข้าไปในตัวแปร bookingList
     userID = respBody.bookingid 
 
-    //for(let index=0;index<userID.length;index++) {
-        const verifyresp = await request.get(`${resource.baseURL}/booking/${userID}`) //เทส Get รายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
-        const verifyrespBody = await verifyresp.json()
-        console.log(verifyrespBody)
-        expect(verifyrespBody.firstname).toEqual('Fluke')
-     //}
+        //Verify - Get bookingDetails:  เพื่อเช็ครายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
+    const verifyresp = await request.get(`${resource.baseURL}/booking/${userID}`)  
+    const verifyrespBody = await verifyresp.json()
+    console.log(verifyrespBody)
+    expect(verifyrespBody.firstname).toEqual('Fluke')
 
-    // //for(let index=0;index<userID.length;index++) {
-    //     const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้
-    //     const respBodyFluke = await respFluke.json()
-    //     console.log(respBodyFluke)
-    //     expect(respBodyFluke.bookingid).toBe(userID) //ยังไม่ผ่าน
+        //Verify - Get booking by Name เพื่อเช็คว่า มี bookingID นี้ถูกไหม
+    const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้
+    const respBodyFluke = await respFluke.json()
+    respBodyFluke.sort((a,b) => {return a-b});
+    console.log(respBodyFluke)
+    expect(respBodyFluke.bookingid).toEqual(expect.arrayContaining(expect.objectContaining([{bookingid : userID}]))) //ยังไม่ผ่าน
 
-    // //}
+
 
 })
 
