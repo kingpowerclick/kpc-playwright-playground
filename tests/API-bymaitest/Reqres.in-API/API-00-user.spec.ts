@@ -18,9 +18,9 @@ test.beforeEach('POST - Create User', async ({request}) => {
         expect(responseBody.name).toEqual ("Sea"); 
         expect (responseBody.job).toEqual ("Archer");
         expect(responseBody).toHaveProperty('id');  //ตรวจสอบว่าการ Response มี property id ซึ่งบ่งบอกว่าผู้ใช้ถูกสร้างขึ้นเรียบร้อยแล้วหรือยัง
-        console.log(response)
+        console.log(responseBody)
 
-        // Keep user id for used : ประกาศตัวแปร userID ที่สร้าง(POST) เก็บไว้เพื่อใช้ทดสอบเคสอื่นต่อ
+        // Keep user id for used : ประกาศตัวแปร userID ที่สร้าง(POST) เก็บไว้เพื่อใช้ทดสอบเคสอื่นต่อ ต้องอยู่ใน func.เดียวกันหรือเคสเดียวกันหรือทำเป็น beforeEach
         userID = responseBody.id;
 });      
 
@@ -32,19 +32,21 @@ test.beforeEach('POST - Create User', async ({request}) => {
                 "job" : "Teacher"
             }
         });
-
-        expect(resp.status()).toBe (200);
+ 
+        expect(resp.status()).toBe (200);  // ส่วนนี้เป็นแค่การเช็คว่า สามารถ edit/update ข้อมูลได้สำเร็จนะ แต่ต้องเช็ค get มาดูอีกที
         const respBody = await resp.json();
         expect(respBody.name).toEqual ("Sky");
-        expect(respBody.job).toEqual ("Teacher");
+        expect(respBody.job).toEqual ("Teacher");  
         console.log(respBody)
 
-        const respCheckget = await request.get(`https://reqres.in/api/users/${userID}`)
-        verifyStatusCode(respCheckget)
-        const respBodyGet = await respCheckget.json();
-        console.log(respBodyGet)
-        expect(respBodyGet.name).toEqual('Sky')
-        expect(respBodyGet.job).toEqual ("Teacher");
+    //ต้องมี get data มาดูว่าที่แก้ไข userID นี้ไป ดึงมาแสดงถูกต้อง แต่ API เส้นนี้เหมือนจะเล่นไม่ได้
+        // const respCheckget = await request.get(`https://reqres.in/api/users/7`)
+        // verifyStatusCode(respCheckget)
+        // //console.log("Body from Get" , respCheckget)
+        // const respBodyGet = await respCheckget.json();
+        // console.log(respBodyGet)
+        // expect(respBodyGet.data.first_name).toEqual("Michael")
+        // expect(respBodyGet.data.id).toEqual(7);
     
     });
 
@@ -78,6 +80,10 @@ test.beforeEach('POST - Create User', async ({request}) => {
         console.log(respBody.updatedAt)
         console.log(nowDate)
 
+        //ต้องมี get data มาดูว่าที่แก้ไข userID นี้ไป ดึงมาแสดงถูกต้อง แต่ API เส้นนี้เหมือนจะเล่นไม่ได้
+
+
+    //ทดลองกรณี ใช้ตัวแปรง timezone ISOString ได้ค่า วันและเวลาเป๊ะๆ 
         // const date = require('date-and-time');
         // const dateNow = new Date().toISOString();
         // const respBody = await resp.json()

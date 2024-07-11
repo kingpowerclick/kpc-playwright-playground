@@ -20,16 +20,16 @@ test('GET - Single User' , async ({request}) => {
 test('GET - All Users' , async ({request}) => {
     const resp = await request.get (`${resource.baseURL}/users?page=2`)
     const respBody = await resp.json();
-    await verifyStatusCode(resp) ;
+    verifyStatusCode(resp) ;
     console.log(respBody)
-    await verifyRespUserdata(respBody);
+    verifyRespUserdata(respBody);
     
 })
 
 test('GET - User Not found', async ({request}) => {
     const resp = await request.get (`${resource.baseURL}/users/23`)
     const respBody = await resp.json();
-    await verifyStatusCode(resp);
+    verifyStatusCode(resp);
     console.log(respBody)
     expect(respBody).toEqual({});
 })
@@ -37,6 +37,6 @@ test('GET - User Not found', async ({request}) => {
 test('GET - Users ID 7 ' , async ({request}) => {
     const resp = await request.get (`${resource.baseURL}/users/7`)
     console.log (await resp.json());
-    await verifyStatusCode(resp) ;
+    verifyStatusCode(resp) ;
 
 })

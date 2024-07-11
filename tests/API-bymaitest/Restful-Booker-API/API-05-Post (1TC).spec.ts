@@ -33,7 +33,6 @@ test("POST - create booking & Verify success", async ({ request }) => {
     // bookingList.push(respBody); // วิธีเพิ่มข้อมูลเข้าไปใน array จะเป็นการเพิ่มข้อมูลต่อท้ายเข้าไปใน array เป็นการเพิ่ม respBody เข้าไปในตัวแปร bookingList
     userID = respBody.bookingid;
 
-
         //Verify - Get bookingDetails:  เพื่อเช็ครายการที่ Post ไปก่อนหน้าว่ามาแสดงถูกต้อง
     const verifyresp = await request.get(`${resource.baseURL}/booking/${userID}`)
     const verifyrespBody = await verifyresp.json()
@@ -44,7 +43,7 @@ test("POST - create booking & Verify success", async ({ request }) => {
     const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้
     const respBodyFluke = await respFluke.json()
     console.log("bookingid", respBodyFluke);
-    expect(respBodyFluke).toEqual(expect.arrayContaining([expect.objectContaining({ bookingid: userID })])) //ยังไม่ผ่าน
+    expect(respBodyFluke).toEqual(expect.arrayContaining([expect.objectContaining({ bookingid: userID })]))
 
 });
 

@@ -4,7 +4,6 @@ import { verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./func
 import { request } from "http";
 
 let tokenID ;
-//let userID ;
 
 //Restful-booker
 test('Get - Auth login' , async ({request}) => {

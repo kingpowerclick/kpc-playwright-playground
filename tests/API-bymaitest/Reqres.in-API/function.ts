@@ -44,8 +44,5 @@ export const verifyRespUserdata = (
     }  
   }
 
-/*export const RespJson = (resp: any) => {  // สร้างตัวแปรประกาศฟังก์ชั่น แปลง json เป็น string และเอาไปใช้ >> ไม่ต้องใช้*
-    let data = resp.json();
-    return data
-}*/ 
+
  

@@ -30,6 +30,13 @@ export const verifyBookingDetails = (resp : any) => {
     // // }
 }
 
+export const getBookingDetailsbyID = ( resp :any) =>{
+
+    
+}
+
+
+
 
 export const verifyBookingID = ( resp : any) => {
 
