@@ -44,10 +44,10 @@ export const resource = {
         bookingdates: {
             checkin: "2024-01-12",
             checkout: "2024-01-13"
-        }
+        },
+        additionalneeds : "Breakfast"
     },
 
-    additionalneeds : "Breakfast"
 
 
 }

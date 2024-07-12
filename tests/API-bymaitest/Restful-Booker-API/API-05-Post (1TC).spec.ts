@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
 import {
+  getBookingDetailsbyID,
   //   verifyBookingDetails,
   //   verifyBookingID,
   verifyStatusCode,
@@ -40,7 +41,7 @@ test("POST - create booking & Verify success", async ({ request }) => {
     expect(verifyrespBody.firstname).toEqual('Fluke')
 
         //Verify - Get booking by Name เพื่อเช็คว่า มี bookingID นี้ถูกไหม
-    const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้
+    const respFluke = await request.get(`${resource.baseURL}/booking?firstname=Fluke`) //หรือจะใส่ firstname เป็น params ก็ได้ สำหรับ get data
     const respBodyFluke = await respFluke.json()
     console.log("bookingid", respBodyFluke);
     expect(respBodyFluke).toEqual(expect.arrayContaining([expect.objectContaining({ bookingid: userID })]))
@@ -49,17 +50,19 @@ test("POST - create booking & Verify success", async ({ request }) => {
 
 //หลัง create เสร็จ ตั้งให้ ลบข้อมูลนั้นออกทุกครั้ง ใช้ afterAll
 test.afterAll(async ({ request }) => {
-  const response = await request.delete(
-    `${resource.baseURL}/booking/${userID}`,
-    {
+  const response = await request.delete(`${resource.baseURL}/booking/${userID}`,{
       headers: {
         ContentType: "application/json",
         Authorization: "Basic YWRtaW46cGFzc3dvcmQxMjM=",
       },
-    }
-  );
+  });
   const respBody = await response.text();
   console.log(respBody);
   verifyStatusCode(response);
   expect(respBody).toEqual("Created");
+
+  await getBookingDetailsbyID(userID,request)
+  console.log('----')
+
+
 });

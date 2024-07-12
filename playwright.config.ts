@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import fa from 'date-and-time/locale/fa';
 
 /**
  * Read environment variables from file.

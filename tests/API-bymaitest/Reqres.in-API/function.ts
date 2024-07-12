@@ -8,6 +8,9 @@ export const verifyStatusCode = (response: APIResponse) => {
     else if (response.status() == 201) {
     expect(response.status()).toEqual(201); 
     }
+    else if (response.status() == 404) {
+      expect(response.status()).toEqual(404); 
+    }
     else {(response.status() == 400)
     expect(response.status() == 400)}
 }

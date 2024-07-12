@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./function";
+import { createBooking, verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./function";
 import { request } from "http";
 
 let tokenID ;
@@ -41,7 +41,7 @@ test.describe('Test Manage Booking' , () => {
         verifyStatusCode(resp);
         expect(respBody).toHaveProperty('bookingid');
         console.log(respBody)
-        expect(respBody.booking).toHaveProperty('additionalneeds');
+        expect(respBody.booking.additionalneeds).toEqual('Breakfast');
         expect(respBody.booking.firstname).toEqual('Supan')
         
         userID = respBody.bookingid
@@ -63,6 +63,8 @@ test.describe('Test Manage Booking' , () => {
 
         //ทดสอบอัพเดทข้อมูล booking by ID
     test('PATCH - Update Name' , async ({request}) => {
+        
+        // createBooking(userID , resp)
         const resp = await request.patch(`${resource.baseURL}/booking/${userID}` , {
             headers: {
                 "ContentType" : "application/json" ,
