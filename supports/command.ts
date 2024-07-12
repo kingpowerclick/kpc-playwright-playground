@@ -2,39 +2,37 @@ import { HttpMethod } from '../utils/http-method.ts'
 import { IncomingHttpHeaders, request } from 'http'
 import { combineURLs } from '../utils/url.ts'
 import { test,expect,Page } from '@playwright/test';
-const axios = require('axios');
+import axios from 'axios';
 
 export interface HttpRequestHeader extends IncomingHttpHeaders {}
 
-export enum UserType {
-    ADMIN = 'admin',
-    USER = 'user',
-}
 
 export const defaultHeaders: HttpRequestHeader = {
-    'content-type': 'application/json',
+    'content-type': 'application/x-www-form-urlencoded',
 }
 
-export const securityHeaders: HttpRequestHeader = {
-    'content-type': 'application/json',
-    'X-Device-Id': 'testqa',
-    'Accept-Language': 'en',
-    'Platform': 'web',
-}
+export async function loginWithusername(username: string, password: string, clientId: string, clientSecret: string,) {
 
+        const params = new URLSearchParams();
+        params.append('grant_type', 'password');
+        params.append('client_id', clientId);
+        params.append('client_secret', clientSecret);
+        params.append('username', username);
+        params.append('password', password);
 
-export async function graphql(graphql: string, headers: HttpRequestHeader = {}){
-
-        const response = await axios.HttpMethod.POST('/', {
-            body: {
-                    query: graphql,
-                },
+        const response = await axios.post('https://iam.kingpower.com/realms/dev-staff-app/protocol/openid-connect/token',
+            params.toString(),
+            {
                 headers: {
-                        ...defaultHeaders,
-                        ...headers,
-                    },
-                encoding: 'utf-8',
-        })
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }
+        );
 
-        return response
+        const accessToken  = response.data.access_token;
+        const tokenType = response.data.token_type;
+
+    return {
+        token: `${tokenType} ${accessToken}`,
     }
+}
