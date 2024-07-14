@@ -25,9 +25,10 @@ test.beforeEach(async ({request}) => {
     const respBody = await resp.json();
     verifyStatusCode(resp);
     expect(respBody).toHaveProperty('bookingid'); //POST,PUT,PATCH,Delete จริงๆไม่ต้อง check respBody เช็คแค่สถานะ success
+    expect(respBody.bookingid).toBeDefined(); //สำหรับเช็คว่ามีค่า ไม่ใช่ undefined
     console.log(respBody)
     expect(respBody.booking).toHaveProperty('additionalneeds'); //แต่ต้อง get เพื่อมาเช็ค respBody ทุกครั้งว่า success & correct
-    expect(respBody.booking.firstname).toEqual('Fluke'); //
+    expect(respBody.booking.firstname).toEqual('Fluke'); 
     
     bookingID = respBody.bookingid ; 
 })
@@ -101,13 +102,16 @@ test.describe('Delete - booking from post data' , () => {
             console.log (respBody)
             verifyStatusCode(resp)
             expect(respBody).toEqual('Created')
-            await getBookingDetailsbyID(bookingID ,request)  //ดึง function Get มาใช้
+            const respGetAfterDeleleted = await getBookingDetailsbyID(bookingID ,request) //ดึง function Get มาใช้เช็คว่า ข้อมูลถูกลบสำเร็จ
+            verifyStatusCode(respGetAfterDeleleted)
+            expect(respGetAfterDeleleted.statusText()).toBe('Not Found')
             console.log ('----')
         })
-    
+    //หรือจะแยก Test Step ออกมาก็ได้
         // await test.step ('Check delete success' , async () => {
         //     const resp = await getBookingDetailsbyID(bookingID , request)
         //     verifyStatusCode(resp)
+        //     expect(respGetAfterDeleleted.statusText()).toBe('Not Found')
         //     console.log('----')
         // })
 

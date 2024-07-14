@@ -14,7 +14,8 @@ test('POST Login - Success' , async ({request}) => {
 
     expect(resp.status()).toBe(200);
     const respBody = await resp.json();
-    expect (respBody).toHaveProperty("token");
+    expect(respBody).toHaveProperty("token");
+    expect(respBody.token).toBeTruthy()
   
 })
 
@@ -43,6 +44,7 @@ test('Register - Success' , async ({request}) => {
     console.log(respBody)
     verifyStatusCode(resp)
     expect(respBody).toHaveProperty('id')
+    expect(respBody.id).toBeTruthy()
     expect(respBody.token).toBeTruthy()
 
 })
