@@ -1,9 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { createBooking, verifyBookingDetails, verifyBookingID , verifyStatusCode } from "./function";
+import { createBooking, getBookingDetailsbyID, verifyBookingDetails, verifyBookingID , verifyStatusCode, verifyStatusText } from "./function";
 import { request } from "http";
+import { ok } from "assert";
 
 let tokenID ;
+let bookingID ;
 const baseURL = resource.baseURL
 
 //Restful-booker
@@ -21,9 +23,8 @@ test('Get - Auth login' , async ({request}) => {
     tokenID = respBody.token ;
 })
 
-test.describe('Test Manage Booking' , () => {
-    let userID ;
-    test('POST - create booking & Verify success' , async ({request}) => {
+
+test('POST - create booking & Verify success' , async ({request}) => {
         const resp = await request.post(`${baseURL}/booking` , {
         data: {
                 firstname : "Supan",
@@ -45,15 +46,16 @@ test.describe('Test Manage Booking' , () => {
         expect(respBody.booking.additionalneeds).toEqual('Breakfast');
         expect(respBody.booking.firstname).toEqual('Supan')
         
-        userID = respBody.bookingid
+        bookingID = respBody.bookingid
 
-        await test.step('Get - BookingDetails' , async () => {
-            const resp = await request.get(`${baseURL}/booking/${userID}` , {
+        await test.step('Get - BookingDetails By ID' , async () => {
+            const resp = await request.get(`${baseURL}/booking/${bookingID}` , {
                 headers: {
                     "Accept" :"application/json", }
             })
             const respBody = await resp.json();
             console.log(respBody)
+            verifyStatusCode(resp)
             verifyBookingDetails(respBody);
     
         })
@@ -61,11 +63,15 @@ test.describe('Test Manage Booking' , () => {
     })
 
 
-        //ทดสอบอัพเดทข้อมูล booking by ID
-    test('PATCH - Update Name' , async ({request}) => {
+    //ทดสอบอัพเดทข้อมูล booking by ID
+test('PATCH - Update Name' , async ({request}) => {
         
-        // createBooking(userID , resp)
-        const resp = await request.patch(`${baseURL}/booking/${userID}` , {
+    const respCreatebooking = await createBooking(request)
+    const respBodyCreatebooking = await respCreatebooking.json()
+    console.log('resp from post data',respBodyCreatebooking)
+    const bookingID = respBodyCreatebooking.bookingid
+
+    const resp = await request.patch(`${baseURL}/booking/${bookingID}` , {
             headers: {
                 "ContentType" : "application/json" ,
                 "Accept" :"application/json",
@@ -73,17 +79,34 @@ test.describe('Test Manage Booking' , () => {
             data:{
                 "firstname" :"Pink" ,
                 "lastname" : "Blue" },
-        });
+    });
         const respBody = await resp.json();
+        console.log('***')
         verifyStatusCode(resp)
-        expect(respBody.firstname).toEqual("Pink")
-        expect(respBody.lastname).toEqual("Blue")
-        expect(respBody.totalprice).toEqual(15000)
+        verifyStatusText(resp)
+        // expect(respBody.firstname).toEqual("Pink")
+        // expect(respBody.lastname).toEqual("Blue")
+        // expect(respBody.totalprice).toEqual(9000)
         console.log(respBody)
+
+    await test.step('Get - BookingDetails by ID' , async () => {
+        const respVerifyGet = await getBookingDetailsbyID(bookingID,request)
+        const respBodyGet = await respVerifyGet.json()
+        console.log('---' ,respBodyGet)
+        verifyStatusCode(respVerifyGet)
+        verifyStatusText(respVerifyGet)
+        expect(respBodyGet.firstname).toEqual("Pink")
+        expect(respBodyGet.lastname).toEqual("Blue")
+        expect(respBodyGet.totalprice).toEqual(9000)
+
+        
+    
     })
 
-//ทดสอบใช้ params
-    test('Get - booking ID by Date' , async ({request}) => {
+})  
+
+    //ทดสอบใช้ params
+test('Get - booking ID by Date' , async ({request}) => {
         const resp = await request.get(`${baseURL}/booking` , {
             params : {
                 checkin : "2021-03-19" , 
@@ -93,8 +116,6 @@ test.describe('Test Manage Booking' , () => {
 
     const respBody = await resp.json()
     console.log(respBody)
-    expect(respBody).toContain(userID) //ยังไม่ผ่าน
+    expect(respBody).toContain(bookingID) //ยังไม่ผ่าน
 
     })
-
-})

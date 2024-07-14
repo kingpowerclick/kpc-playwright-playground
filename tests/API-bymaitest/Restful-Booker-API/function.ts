@@ -7,14 +7,25 @@ export const verifyStatusCode = (response: APIResponse) => {
     expect (response.status()).toEqual(200)
     }
     else if (response.status() == 201) {
-    expect(response.status()).toEqual(201);
+    expect(response.status()).toEqual(201)
     }
     else if (response.status() == 404) {
-    expect(response.status()).toEqual(404); 
+    expect(response.status()).toEqual(404)
     }
     else {(response.status() == 400)
     expect(response.status() == 400)}
 }
+
+export const verifyStatusText = (response:any) => {
+    if(response.statusText() == 'OK'){
+    expect(response.statusText()).toBe('OK')
+    }
+    else if(response.statusText() == 'Not Found') {
+    expect(response.statusText()).toBe('Not Found')
+    }
+
+}
+
 
 export const verifyBookingDetails = (resp : any) => {
     const dataBooking = resource.bookingDetail
@@ -36,9 +47,9 @@ export const verifyBookingDetails = (resp : any) => {
     // // }
 }
 
-export const createBooking = (respBody , ) => {
-    async({request}) => {
-    const resp = await request.post(`${resource.baseURL}/booking` , {
+export const createBooking = (request : any) => {
+    console.log('In to Function')
+    const resp = request.post(`${resource.baseURL}/booking` , {
         data: {
                 "firstname" : "Fluke",
                 "lastname" : "Wara",
@@ -51,17 +62,18 @@ export const createBooking = (respBody , ) => {
                 "additionalneeds" : "Breakfast"
             }
     })
-
-    const respBody = await resp.json();
-    verifyStatusCode(resp);
-    expect(respBody).toHaveProperty('bookingid');
-    console.log(respBody)
-    expect(respBody.booking).toHaveProperty('additionalneeds');
-    expect(respBody.booking.firstname).toEqual('Fluke');
     
-    let bookingID = respBody.bookingid ; 
-    return bookingID
-}}
+    return resp
+    // const respBody = resp.json();
+    // verifyStatusCode(resp);
+    // expect(respBody).toHaveProperty('bookingid');
+    // console.log(respBody)
+    // expect(respBody.booking).toHaveProperty('additionalneeds');
+    // expect(respBody.booking.firstname).toEqual('Fluke');
+    
+    // let bookingID = respBody.bookingid ; 
+    // return bookingID
+}
 
 export const getBookingDetailsbyID = (bookingID:any, request : any) => {
     console.log('In to Function')

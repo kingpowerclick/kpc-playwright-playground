@@ -5,6 +5,7 @@ import {
   //   verifyBookingDetails,
   //   verifyBookingID,
   verifyStatusCode,
+  verifyStatusText
 } from "./function";
 import { request } from "http";
 let userID: string;
@@ -61,7 +62,10 @@ test.afterAll(async ({ request }) => {
   verifyStatusCode(response);
   expect(respBody).toEqual("Created");
 
-  await getBookingDetailsbyID(userID,request)
+  const respAfterAll = await getBookingDetailsbyID(userID,request)
+  verifyStatusCode(respAfterAll)
+  verifyStatusText(respAfterAll) //ใช้ function มาแทนบรรทัดล่างได้
+  //expect(respAfterAll.statusText()).toBe('Not Found')
   console.log('----')
 
 

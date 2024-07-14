@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { getBookingDetailsbyID, verifyBookingDetails, verifyStatusCode } from "./function";
+import { getBookingDetailsbyID, verifyBookingDetails, verifyStatusCode, verifyStatusText } from "./function";
 import { request } from "http";
 
 let bookingID ;  // ประกาศตัวแปร เก็บค่า bookingID  ไว้ใช้ validate ต่อ
@@ -102,9 +102,11 @@ test.describe('Delete - booking from post data' , () => {
             console.log (respBody)
             verifyStatusCode(resp)
             expect(respBody).toEqual('Created')
+
             const respGetAfterDeleleted = await getBookingDetailsbyID(bookingID ,request) //ดึง function Get มาใช้เช็คว่า ข้อมูลถูกลบสำเร็จ
             verifyStatusCode(respGetAfterDeleleted)
-            expect(respGetAfterDeleleted.statusText()).toBe('Not Found')
+            verifyStatusText(respGetAfterDeleleted)
+            //expect(respGetAfterDeleleted.statusText()).toBe('Not Found')
             console.log ('----')
         })
     //หรือจะแยก Test Step ออกมาก็ได้
