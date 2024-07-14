@@ -40,6 +40,7 @@ test.beforeEach('POST - Create User', async ({request}) => {
         console.log(respBody)
 
     //ต้องมี get data มาดูว่าที่แก้ไข userID นี้ไป ดึงมาแสดงถูกต้อง แต่ API เส้นนี้เหมือนจะเล่นไม่ได้
+
         // const respCheckget = await request.get(`https://reqres.in/api/users/7`)
         // verifyStatusCode(respCheckget)
         // //console.log("Body from Get" , respCheckget)
@@ -56,11 +57,13 @@ test.beforeEach('POST - Create User', async ({request}) => {
 
     expect(response.status()).toBe (204);
     console.log(response);
-
+    
+    //ต้องมี get data มาดูว่ารายการที่ลบไป หายไปแล้วถูกต้อง
     })
+   
 
     test('PATCH - Update Partial User' , async ({request}) => {
-        const resp = await request.patch(`${resource.baseURL}/user/7` , { //หรือจะให้มันอัพเดท userID ที่สร้างไว้ก่อนหน้า `${resource.baseURL}/user/${userID}` or + userID (ต้องอยู่ใน fuc. เดียวกัน)
+        const resp = await request.patch(`${resource.baseURL}/user/7` , { //หรือจะให้มันอัพเดท userID ที่สร้างไว้ก่อนหน้า `${resource.baseURL}/user/${userID}` or + userID (อยู่ใน beforeEach)
             data : {
                 name : "Mai" , 
                 job : "QA"
@@ -76,7 +79,7 @@ test.beforeEach('POST - Create User', async ({request}) => {
         verifyStatusCode(resp)
         console.log(respBody)
         expect(respBody.name).toEqual("Mai")
-        expect(respBody.updatedAt).toContain(nowDate)  //เช็คแค่วันที่ตรงกัน ไม่เช็คเวลา
+        expect(respBody.updatedAt).toContain(nowDate)  //เช็คแค่วันที่ตรงกัน ไม่เช็คเวลา หรือจะใช้ .toBeTruthy
         console.log(respBody.updatedAt)
         console.log(nowDate)
 

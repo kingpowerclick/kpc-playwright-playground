@@ -4,10 +4,11 @@ import { createBooking, verifyBookingDetails, verifyBookingID , verifyStatusCode
 import { request } from "http";
 
 let tokenID ;
+const baseURL = resource.baseURL
 
 //Restful-booker
 test('Get - Auth login' , async ({request}) => {
-    const resp = await request.post(`${resource.baseURL}/auth` , {
+    const resp = await request.post(`${baseURL}/auth` , {
         data : resource.loginAccount  //ใส่เป็นข้อมูล { user,pass } ก็ได้หรือว่าประกาศใน data แล้วดึงมาใช้แบบนี้ก็ได้
     })
     const respBody = await resp.json()
@@ -23,7 +24,7 @@ test('Get - Auth login' , async ({request}) => {
 test.describe('Test Manage Booking' , () => {
     let userID ;
     test('POST - create booking & Verify success' , async ({request}) => {
-        const resp = await request.post(`${resource.baseURL}/booking` , {
+        const resp = await request.post(`${baseURL}/booking` , {
         data: {
                 firstname : "Supan",
                 lastname : "Hatt",
@@ -37,7 +38,7 @@ test.describe('Test Manage Booking' , () => {
             }
         })
     
-        const respBody = await resp.json();
+        const respBody =  await resp.json();  //JSON.parse(await resp.text()) ไว้ใช้แปลง resp text เป็น json 
         verifyStatusCode(resp);
         expect(respBody).toHaveProperty('bookingid');
         console.log(respBody)
@@ -47,12 +48,11 @@ test.describe('Test Manage Booking' , () => {
         userID = respBody.bookingid
 
         await test.step('Get - BookingDetails' , async () => {
-            const resp = await request.get(`${resource.baseURL}/booking/${userID}` , {
+            const resp = await request.get(`${baseURL}/booking/${userID}` , {
                 headers: {
                     "Accept" :"application/json", }
             })
             const respBody = await resp.json();
-            
             console.log(respBody)
             verifyBookingDetails(respBody);
     
@@ -65,7 +65,7 @@ test.describe('Test Manage Booking' , () => {
     test('PATCH - Update Name' , async ({request}) => {
         
         // createBooking(userID , resp)
-        const resp = await request.patch(`${resource.baseURL}/booking/${userID}` , {
+        const resp = await request.patch(`${baseURL}/booking/${userID}` , {
             headers: {
                 "ContentType" : "application/json" ,
                 "Accept" :"application/json",
@@ -84,7 +84,7 @@ test.describe('Test Manage Booking' , () => {
 
 //ทดสอบใช้ params
     test('Get - booking ID by Date' , async ({request}) => {
-        const resp = await request.get(`${resource.baseURL}/booking` , {
+        const resp = await request.get(`${baseURL}/booking` , {
             params : {
                 checkin : "2021-03-19" , 
                 checkout : "2024-01-26"

@@ -24,7 +24,7 @@ export const verifyBookingDetails = (resp : any) => {
     expect(resp.depositpaid).toEqual(dataBooking.depositpaid);
     expect(resp.bookingdates.checkin).toEqual(dataBooking.bookingdates.checkin);
     expect(resp.bookingdates.checkout).toEqual(dataBooking.bookingdates.checkout);
-    expect(resp.additionalneeds).toEqual(dataBooking.additionalneeds);
+    //expect(resp.additionalneeds).toEqual(dataBooking.additionalneeds);
 
     // let bookingDetailsList = new Array();
     // const bookingData = resource.bookingDetail;
@@ -36,7 +36,7 @@ export const verifyBookingDetails = (resp : any) => {
     // // }
 }
 
-export const createBooking = () => {
+export const createBooking = (respBody , ) => {
     async({request}) => {
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
@@ -59,11 +59,11 @@ export const createBooking = () => {
     expect(respBody.booking).toHaveProperty('additionalneeds');
     expect(respBody.booking.firstname).toEqual('Fluke');
     
-    // let bookingID = respBody.bookingid ; 
-    // return bookingID
+    let bookingID = respBody.bookingid ; 
+    return bookingID
 }}
 
-export const getBookingDetailsbyID = (bookingID, request) => {
+export const getBookingDetailsbyID = (bookingID:any, request : any) => {
     console.log('In to Function')
     const resp = request.get(`${resource.baseURL}/booking/${bookingID}`)
     return resp

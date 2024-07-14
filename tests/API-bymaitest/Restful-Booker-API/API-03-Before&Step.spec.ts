@@ -62,7 +62,7 @@ test.describe('PUT - Update booking' , () => {
                 }
             })
 
-            //verifyStatusCode(resp)
+            //verifyStatusCode(resp) ใช้อันล่างแทนได้
             expect(resp.ok()).toBeTruthy()
             const respBody = await resp.json()  //POST,PUT,PATCH,Delete จริงๆไม่ต้อง check respBody เช็คแค่สถานะ success
             expect(respBody.firstname).toEqual('Mai') //หลังจาก method พวกนี้ ต้อง get เพื่อมาเช็ค respBody ทุกครั้ง
