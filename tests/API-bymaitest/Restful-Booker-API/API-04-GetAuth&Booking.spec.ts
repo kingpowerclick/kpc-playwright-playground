@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { createBooking, getBookingDetailsbyID, verifyBookingDetails, verifyBookingID , verifyStatusCode, verifyStatusText } from "./function";
+import { createBooking, createBookingTEST, getBookingDetailsbyID, 
+verifyBookingDetails, verifyBookingIDbyDate , verifyStatusCode, verifyStatusText } from "./function";
 import { request } from "http";
 import { ok } from "assert";
 
@@ -99,23 +100,32 @@ test('PATCH - Update Name' , async ({request}) => {
         expect(respBodyGet.lastname).toEqual("Blue")
         expect(respBodyGet.totalprice).toEqual(9000)
 
-        
-    
     })
 
 })  
 
     //ทดสอบใช้ params
 test('Get - booking ID by Date' , async ({request}) => {
-        const resp = await request.get(`${baseURL}/booking` , {
+
+    const resp = await request.get(`${baseURL}/booking` , {
             params : {
-                checkin : "2021-03-19" , 
-                checkout : "2024-01-26"
+                checkin : "2023-12-01" , 
+                checkout : "2024-12-30"
                 }
-        })
+    })
 
     const respBody = await resp.json()
     console.log(respBody)
-    expect(respBody).toContain(bookingID) //ยังไม่ผ่าน
+    verifyStatusCode(resp)
+    //verifyStatusText(respBody)
+    verifyBookingIDbyDate(respBody)
+    //expect(respBody).toContain(bookingID) //ยังไม่ผ่าน
 
-    })
+
+
+})
+
+
+
+test('Get - booking ID by Name:Mark' , async ({request}) => {})
+test('Get - All booking ID' , async ({request}) => {})

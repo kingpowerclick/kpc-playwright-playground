@@ -47,7 +47,7 @@ export const verifyBookingDetails = (resp : any) => {
     // // }
 }
 
-export const createBooking = (request : any) => {
+export  const createBooking = (request : any) => {
     console.log('In to Function')
     const resp = request.post(`${resource.baseURL}/booking` , {
         data: {
@@ -60,7 +60,7 @@ export const createBooking = (request : any) => {
                     "checkout" : "2024-01-12"
                 },
                 "additionalneeds" : "Breakfast"
-            }
+        }
     })
     
     return resp
@@ -82,7 +82,38 @@ export const getBookingDetailsbyID = (bookingID:any, request : any) => {
 }
 
 
-export const verifyBookingID = ( resp : any) => {
+export const verifyBookingIDbyDate = ( resp : any) => {
+    const bookingID = resource.bookingID
+    console.log(bookingID.length)
+    for(let index = 0 ; index < bookingID.length; index++){
+        expect(resp[index].bookingid).toEqual(bookingID[index].bookingid)
+    }
 
 }
 
+
+//ทดลองเอาพวก respBody กับ expect ต่างๆไว้ใน func
+export const createBookingTEST = (request : any) => { 
+    async({request}) => {
+    console.log('In to Function')
+    const resp = await request.post(`${resource.baseURL}/booking` , {
+        data: {
+                "firstname" : "Fluke",
+                "lastname" : "Wara",
+                "totalprice" : 9000 ,
+                "depositpaid" : true,
+                "bookingdates" : {
+                    "checkin" : "2024-01-01",
+                    "checkout" : "2024-01-12"
+                },
+                "additionalneeds" : "Breakfast"
+        }
+    })
+    const respBody = await resp.json()
+    console.log('Test' ,respBody)
+    expect(respBody.fistname).toBe('Fluke')
+
+    return respBody
+    
+    }
+}
