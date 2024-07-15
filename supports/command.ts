@@ -1,7 +1,5 @@
 import { HttpMethod } from '../utils/http-method.ts'
 import { IncomingHttpHeaders, request } from 'http'
-import { combineURLs } from '../utils/url.ts'
-import { test,expect,Page } from '@playwright/test';
 import axios from 'axios';
 
 export interface HttpRequestHeader extends IncomingHttpHeaders {}
@@ -12,7 +10,8 @@ export const defaultHeaders: HttpRequestHeader = {
 }
 
 export async function loginWithusername(username: string, password: string, clientId: string, clientSecret: string,) {
-
+        username = username === '' ? '10000' : username
+        password = password === '' ? 'test123123' : password
         const params = new URLSearchParams();
         params.append('grant_type', 'password');
         params.append('client_id', clientId);
