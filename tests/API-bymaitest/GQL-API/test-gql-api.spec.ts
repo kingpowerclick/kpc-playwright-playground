@@ -45,10 +45,10 @@ test('the GraphQL API Works' , async ({request}) => {
             `,
         },
     })
-    const getGermanyData = await germanyResp.json();
-    console.log(getGermanyData);
-    expect(getGermanyData.data.countries).toHaveLength(1)
-    expect(getGermanyData.data.countries[0].name).toBe("Germany")
+    const GermanyData = await germanyResp.json();
+    console.log(GermanyData);
+    expect(GermanyData.data.countries).toHaveLength(1)
+    expect(GermanyData.data.countries[0].name).toBe("Germany")
 
 })
 
