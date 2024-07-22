@@ -1,4 +1,4 @@
-import { expect, APIResponse } from "@playwright/test";
+import { expect, APIResponse, APIRequestContext } from "@playwright/test";
 import { resource } from "./data";
 import { request } from "http";
 
@@ -16,7 +16,7 @@ export const verifyStatusCode = (response: APIResponse) => {
     expect(response.status() == 400)}
 }
 
-export const verifyStatusText = (response:any) => {
+export const verifyStatusText = (response: APIResponse) => {
     if(response.statusText() == 'OK'){
     expect(response.statusText()).toBe('OK')
     }
@@ -47,7 +47,7 @@ export const verifyBookingDetails = (resp : any) => {
     // // }
 }
 
-export  const createBooking = (request : any) => {
+export  const createBooking = (request : APIRequestContext) => {
     console.log('In to Function')
     const resp = request.post(`${resource.baseURL}/booking` , {
         data: {
@@ -75,7 +75,7 @@ export  const createBooking = (request : any) => {
     // return bookingID
 }
 
-export const getBookingDetailsbyID = (bookingID:any, request : any) => {
+export const getBookingDetailsbyID = (bookingID:any, request : APIRequestContext) => {
     console.log('In to Function')
     const resp = request.get(`${resource.baseURL}/booking/${bookingID}`)
     return resp
@@ -93,8 +93,8 @@ export const verifyBookingIDbyDate = ( resp : any) => {
 
 
 //ทดลองเอาพวก respBody กับ expect ต่างๆไว้ใน func
-export const createBookingTEST = (request : any) => { 
-    async({request}) => {
+export const createBookingTEST = (request : APIRequestContext , bookingID : number) => { 
+    async() => {
     console.log('In to Function')
     const resp = await request.post(`${resource.baseURL}/booking` , {
         data: {
@@ -112,8 +112,9 @@ export const createBookingTEST = (request : any) => {
     const respBody = await resp.json()
     console.log('Test' ,respBody)
     expect(respBody.fistname).toBe('Fluke')
+    const bookingID = respBody.bookingid
 
-    return respBody
+    return bookingID
     
     }
 }

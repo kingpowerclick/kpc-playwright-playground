@@ -104,7 +104,7 @@ test('PATCH - Update Name' , async ({request}) => {
 
 })  
 
-    //ทดสอบใช้ params
+    //ทดสอบใช้ params  Note : response ได้ไม่ตรงกันในแต่ละรอบ
 test('Get - booking ID by Date' , async ({request}) => {
 
     const resp = await request.get(`${baseURL}/booking` , {
@@ -129,3 +129,19 @@ test('Get - booking ID by Date' , async ({request}) => {
 
 test('Get - booking ID by Name:Mark' , async ({request}) => {})
 test('Get - All booking ID' , async ({request}) => {})
+
+//ตัวอย่าง ลองสร้างเคส API จากหน้า UI
+test('API with UI Verification' , async({request , page}) => {
+    const resp = await request.post('https://api.demoblaze.com/bycat' , {
+        data: {
+            cat: "phone"
+        }
+    })
+    const respBody = await resp.json()
+    console.log(respBody)
+    console.log(respBody.Items[0].title)
+    await page.goto('https://demoblaze.com/')
+    await expect(page.getByRole('link', { name: 'Samsung galaxy s6' })).toHaveText(respBody.Items[0].title)
+
+
+})

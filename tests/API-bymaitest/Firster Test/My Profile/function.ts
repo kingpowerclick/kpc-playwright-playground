@@ -2,6 +2,54 @@ import { expect, APIResponse } from "@playwright/test";
 import { resource } from "./data";
 import { memoryUsage } from "process";
 
+const baseURL = resource.baseURL;
+
+// export const loginFront = ( username: string, usernameType: string, password: string, phoneNumber: string) => {
+//     const gql =  `
+//     mutation Login {
+//         login(
+//             input: {
+//                 username: "${username}"
+//                 usernameType: ${usernameType}
+//                 password: "${password}"
+//                 phoneCode: "${phoneNumber}"
+//             }
+//         ) {
+//             tokenType
+//             accessToken
+//             refreshToken
+//             expiresIn
+//         }
+//     }` 
+//     return gql
+
+// }
+
+export const loginFront = (username: string, usernameType: string, password: string, phoneNumber: string, request: any) => {
+    console.log("Into Function")
+    const resp = request.post(`${baseURL}` , {
+        data: {
+            query :  `
+            mutation Login {
+                login(
+                    input: {
+                        username: "${username}"
+                        usernameType: ${usernameType}
+                        password: "${password}"
+                        phoneCode: "${phoneNumber}"
+                    }
+                ) {
+                    tokenType
+                    accessToken
+                    refreshToken
+                    expiresIn
+                }
+            }` 
+        }
+    })
+    return resp
+
+}
 
 
 export const verifyStatusCode = (response: APIResponse) => {

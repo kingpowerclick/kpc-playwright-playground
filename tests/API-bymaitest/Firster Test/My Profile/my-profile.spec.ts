@@ -1,34 +1,39 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { verifyMyProfile, verifyStatusCode, verifyStatusText } from "./function";
+import { loginFront, verifyMyProfile, verifyStatusCode, verifyStatusText } from "./function";
+import { log } from "console";
 
 const baseURL = resource.baseURL;
 const myProfile = resource.myProfile;
+const login = resource.login;
 let accessToken;
 
+    //ลองใช้ before กับ ​function login มาใส่ใน data = PASS
+// test.beforeAll('Login with my account' , async ({request}) => {
+//     const resp = await request.post(`${baseURL}` , {
+//         data: {
+//             query: loginFront(login.username, login.usernameTypeEmail, login.password, login.phoneCode)
+//         }
+//     })
+//     const respBody = await resp.json()
+//     verifyStatusCode(resp);
+//     verifyStatusText(resp)
+//     console.log(respBody);
+//     expect(respBody.data.login).toHaveProperty("accessToken");
+//     expect(respBody.accessToken).not.toBeNull();
+//     expect(respBody.data.login).toBeTruthy();
 
+//     accessToken = respBody.data?.login?.accessToken ;
+//     console.log('Token' ,accessToken)
+
+// })
+
+    //ลองใช้ before กับ ​function login มาใส่ทั้งหมด
 test.beforeAll('Login with my account' , async ({request}) => {
-    const resp = await request.post(`${baseURL}` , {
-        data: {
-            query: `
-            mutation Login {
-                login(
-                    input: {
-                        username: "mai@test.com"
-                        usernameType: EMAIL
-                        password: "F1mai123"
-                        phoneCode: "0652236926"
-                    }
-                ) {
-                    tokenType
-                    accessToken
-                    refreshToken
-                    expiresIn
-                }
-            }`    
-        }
-    })
-    const respBody = await resp.json()
+    
+    const resp = await loginFront(login.username, login.usernameTypeEmail, login.password, login.phoneCode , request)
+
+    const respBody = await resp.gql()
     verifyStatusCode(resp);
     verifyStatusText(resp)
     console.log(respBody);
@@ -40,6 +45,7 @@ test.beforeAll('Login with my account' , async ({request}) => {
     console.log('Token' ,accessToken)
 
 })
+
 
 
 test('Get My Profile' , async ({request}) => {

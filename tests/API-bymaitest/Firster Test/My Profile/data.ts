@@ -1,8 +1,15 @@
+export enum usernameType {
+        email = 'EMAIL',
+        phoneNumber = 'MOBILE_NO',
+}
+
+
 export const resource = {
     baseURL: 'https://pd1-graph.firster.kpc-dev.com/graphql' ,
     login: {
             username: "mai@test.com" ,
-            usernameType: "EMAIL",
+            usernameTypeEmail: usernameType.email ,
+            usernameTypePhone: usernameType.phoneNumber ,
             password: "F1mai123" ,
             phoneCode: "0652236926"
     },
