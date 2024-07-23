@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { resource } from "./data";
-import { loginFront, verifyMyProfile, verifyStatusCode, verifyStatusText } from "./function";
+import { loginFront, loginFrontF1, verifyMyProfile, verifyStatusCode, verifyStatusText } from "./function";
 import { log } from "console";
 
 const baseURL = resource.baseURL;
@@ -28,12 +28,12 @@ let accessToken;
 
 // })
 
-    //ลองใช้ before กับ ​function login มาใส่ทั้งหมด
+    //ลองใช้ before กับ เอา​function login มาใช้ทั้งหมด
 test.beforeAll('Login with my account' , async ({request}) => {
     
-    const resp = await loginFront(login.username, login.usernameTypeEmail, login.password, login.phoneCode , request)
+    const resp = await loginFrontF1 (login.username, login.usernameTypeEmail, login.password, login.phoneCode ,request)
 
-    const respBody = await resp.gql()
+    const respBody = await resp.json()
     verifyStatusCode(resp);
     verifyStatusText(resp)
     console.log(respBody);
@@ -91,13 +91,7 @@ test('Get My Profile' , async ({request}) => {
     console.log(respBody)
     verifyStatusCode(response)
     verifyStatusText(response)
-    verifyMyProfile(
-        respBody, 
-        myProfile.mobileNumber,
-        myProfile.email,
-        myProfile.customerId,
-        myProfile.member
-    )
+    verifyMyProfile(respBody, myProfile.mobileNumber, myProfile.email, myProfile.customerId, myProfile.member)
     console.log(myProfile.isFirsterConsentAccepted)
 
 
