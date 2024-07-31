@@ -7,12 +7,17 @@ export enum usernameType {
 export const resource = {
     baseURL: 'https://pd1-graph.firster.kpc-dev.com/graphql' ,
     login: {
-            username: "mai@test.com" ,
+            usernameEmail: "mai@test.com" ,
+            usernamePhone: "652236926",
+            wrongEmail: "mai@te.com",
+            blankUsername: ' ' ,
             usernameTypeEmail: usernameType.email ,
             usernameTypePhone: usernameType.phoneNumber ,
             password: "F1mai123" ,
+            invalidPass: "mai123",
+            wrongFormatPass: "F1m",
             phoneCode: "0652236926"
-    },
+        },
     myProfile: {
             gender: null,
             phoneCode: "THA-66",
@@ -20,13 +25,24 @@ export const resource = {
             isMobileNumberActive: true,
             email: "mai@test.com",
             havePassword: true,
-            customerId: "c5f9bd2e-3908-4a2b-884a-0fcf4c8995a3",
+            customerId: "652bc0f3-3989-4e64-b081-ada59715a603",
             isFirsterConsentAccepted: true,
             isFirsterMemberConsentAccepted: false,
             isMarketingConsentAccepted: false,
             member: null
-
-    }
+        },
+    responseMessage: {
+        codeInvalidInput: "login_invalid_input",
+        msgIncorrect: "Phone number or email or password was incorrect, Please try again.",
+        fieldPass: "Password",
+        fieldUsername: "Username",
+        errorMobileWrongFormat: "Mobile number must equal 9 characters",
+        errorIncorrectPass: "Incorrect password format.",
+        errorIncorrectFormat: "Email format not correct",
+        errorRequireUsername: "Require username" ,
+        errorUsernameEmpty: "'Username' must not be empty.",
+        errorUsernamewithSpace: "Email must not contain whitespace",
+        }
 }
 
 
