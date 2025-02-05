@@ -3,12 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run format:check"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.40.1",
-    "@types/node": "^20.10.6"
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^20.10.6",
+    "prettier": "^3.2.4"
   }
 }

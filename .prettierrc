@@ -1,0 +1,7 @@
+{
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": ["^@playwright/(.*)$", "^[./]"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "semi": true
+}
