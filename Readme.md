@@ -52,8 +52,32 @@ We categorize tests into three types:
 
 ## 🚀 Running Tests
 
+# รันการทดสอบทั้งหมดแบบ End-to-End (E2E)
+
+yarn playwright test
+
+# แสดงผลในรูปแบบ HTML Report จากการรัน Playwright
+
+yarn playwright show-report
+
+# เปิดโหมด UI อินเทอร์แอคทีฟ เพื่อจัดการและตรวจสอบการทดสอบ
+
+yarn playwright test --ui
+
+# รันการทดสอบเฉพาะในไฟล์ที่ระบุ (ในตัวอย่างนี้คือไฟล์ example)
+
+yarn playwright test example
+
+# รันการทดสอบในโหมดดีบัก (Debug) เพื่อช่วยวิเคราะห์ปัญหา
+
+yarn playwright test --debug
+
+# ใช้ Codegen เพื่อสร้างโค้ดสำหรับการทดสอบโดยอัตโนมัติ
+
+yarn playwright codegen
+
 ### **1️⃣ Install Dependencies**
 
 ```sh
-npm install
+yarn install
 ```
